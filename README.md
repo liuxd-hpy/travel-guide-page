@@ -5,7 +5,7 @@
 面向 AI 编码助手（[opencode](https://github.com/sst/opencode) / Claude Code 等）的 Skill：给它一句「做一份川藏线 24 天自驾攻略」，它会问你 8 个问题、抓 200 张小红书实拍原图、核实闭馆日和抢票时刻，最后产出两个 7 MB 的 HTML 文件——**零外链、零 CDN、断网也能看**。
 
 > ### 👉 在线预览成品
-> **[川藏线 24 天纯电自驾攻略（电脑版）](docs/guide-desktop.html)｜[手机版](docs/guide-mobile.html)**
+> **[川藏线 24 天纯电自驾攻略（电脑版）](https://liuxd-hpy.github.io/travel-guide-page/index.html)｜[手机版](https://liuxd-hpy.github.io/travel-guide-page/guide-mobile.html)**
 > 2027/7/12 – 8/4 · 赣州→成都→珠峰→拉萨→昌都→成都 · 5563km · 最高 5248m · 4 人
 > 36 张 1080px+ 实拍原图 · 10 章 · 左侧二级目录 · 3 张内联 SVG 地图 · 人均 14,646 元
 >
