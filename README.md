@@ -60,7 +60,7 @@
 ### Step 0 · 安装
 
 ```bash
-git clone https://github.com/<你的账号>/travel-guide-page.git \
+git clone https://github.com/liuxd-hpy/travel-guide-page.git \
   ~/.config/opencode/skills/travel-guide-page
 ```
 
