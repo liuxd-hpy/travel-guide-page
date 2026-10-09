@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<title>{{TITLE}}</title>
+<style>
+:root{--bg:#f6f3ee;--card:#fff;--ink:#15181c;--muted:#666e79;--red:#b13a24;--teal:#0d6b60;--gold:#b9862f;--line:#e6ded2;--dark:#14171a}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;font-size:17px;line-height:1.85;letter-spacing:.2px;padding-bottom:env(safe-area-inset-bottom)}
+img{max-width:100%;height:auto;border:0}a{color:var(--teal)}
+.wrap{max-width:640px;margin:0 auto;padding:0 15px}
+/* 顶栏：章节横滑 + 进度条 */
+.top{position:sticky;top:0;z-index:60;background:rgba(20,23,26,.97);backdrop-filter:blur(6px);box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.top .bar{display:flex;align-items:center;gap:10px;padding:9px 15px 3px;max-width:640px;margin:0 auto}
+.top .bar b{color:#fff;font-size:15px;letter-spacing:1px;white-space:nowrap}
+.top .bar span{color:#e9c98a;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:6px 15px 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips a{flex:0 0 auto;padding:7px 13px;border-radius:99px;background:rgba(255,255,255,.1);color:#f2ede4;font-size:13.5px;text-decoration:none;white-space:nowrap;border:1px solid rgba(255,255,255,.12)}
+.chips a em{font-style:normal;color:#e9c98a;margin-right:5px;font-size:12px}
+#prog{height:3px;background:linear-gradient(90deg,var(--red),var(--gold));width:0;transition:width .1s linear}
+.hero{background:var(--dark);color:#f4efe6;padding:28px 0 26px}
+.kicker{display:inline-block;font-size:12.5px;letter-spacing:2px;color:#e9c98a;border:1px solid rgba(233,201,138,.5);padding:5px 12px;border-radius:99px}
+h1{font-size:33px;line-height:1.22;margin:15px 0 8px;font-weight:800}
+h1 span{color:#e9c98a}
+.lead{color:#c8c2b6;font-size:15.5px;margin:0 0 18px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:10px 13px}
+.stat b{display:block;font-size:20px;color:#fff;line-height:1.35}
+.stat i{font-style:normal;font-size:11.8px;color:#a9a294;letter-spacing:.6px}
+section{padding:30px 0 4px}
+.h2{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.h2 em{font-style:normal;font-size:12.5px;letter-spacing:2.5px;color:var(--red);font-weight:700}
+.h2 h2{font-size:23px;margin:0;font-weight:800;line-height:1.35}
+.sub{color:var(--muted);font-size:14.8px;margin:2px 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 15px 13px;margin-bottom:12px}
+.cards{display:block}
+.tag{display:inline-block;font-size:12px;letter-spacing:1.2px;color:#fff;background:var(--teal);border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.tag.r{background:var(--red)}.tag.g{background:var(--gold)}
+.card p{margin:5px 0;font-size:15.4px;color:#3c434d}
+.card p b{color:var(--ink)}
+.price{font-weight:800;color:var(--red);font-size:17px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px 15px 8px;margin-bottom:15px}
+.day-h{border-bottom:2px solid var(--line);padding-bottom:10px;margin-bottom:4px}
+.day-h .d{display:inline-block;font-size:12.5px;letter-spacing:1.5px;background:var(--dark);color:#f0e7d6;border-radius:7px;padding:3px 10px;margin-right:8px}
+.day-h h3{display:inline;font-size:19px;margin:0;font-weight:800}
+.day-h .km{display:block;margin-top:6px;font-size:14px;color:var(--red);font-weight:700}
+.tl{list-style:none;margin:10px 0 4px;padding:0}
+.tl li{padding:9px 0;border-bottom:1px dashed var(--line);font-size:15.6px}
+.tl li:last-child{border-bottom:0}
+.tl time{display:inline-block;background:var(--teal);color:#fff;border-radius:7px;padding:1px 9px;font-size:13.2px;font-weight:700;margin-right:8px;letter-spacing:.5px;vertical-align:1.5px}
+.tip{background:#fdf6e8;border:1px solid #eddfbe;border-left:4px solid var(--gold);border-radius:11px;padding:11px 13px;font-size:14.8px;color:#5a4a24;margin:13px 0}
+.tip.warn{background:#fdefec;border-color:#f3cfc6;border-left-color:var(--red);color:#7a3323}
+.tip.ok{background:#eef7f4;border-color:#cfe6e0;border-left-color:var(--teal);color:#1d5a52}
+.ph{margin:0 0 13px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:9px 9px 6px;position:relative}
+.ph img{display:block;width:100%;height:auto;border-radius:11px;cursor:zoom-in;background:#efeae2;-webkit-tap-highlight-color:transparent}
+.ph figcaption{font-size:13.6px;color:var(--muted);padding:8px 3px 3px;line-height:1.65}
+.ph figcaption b{color:var(--ink)}
+.ph figcaption a{color:var(--red);text-decoration:none;font-weight:600}
+.ph .zoom{position:absolute;top:17px;right:17px;background:rgba(20,23,26,.72);color:#fff;font-size:11.5px;padding:4px 9px;border-radius:99px;pointer-events:none;opacity:.85}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@media(max-width:400px){.duo{grid-template-columns:1fr}}
+.hint{font-size:12.5px;color:var(--muted);margin:2px 0 6px;letter-spacing:1px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:600px;font-size:14.4px}
+th,td{padding:10px 11px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1ece3;font-size:12.6px;letter-spacing:1px;color:#4a515b;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td b{color:var(--red)}
+.odd tr:nth-child(even) td{background:#fbf9f5}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:360px){.gal{grid-template-columns:repeat(2,1fr)}}
+/* 内联 SVG 地图（01 路线图 / 04 城市点位图）。不要给 svg 写死 height，否则窄屏横向溢出 */
+.mapbox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 8px 6px;margin:4px 0 18px}
+.mapbox svg{display:block;width:100%;height:auto}
+.mapnote{font-size:12px;color:var(--muted);padding:4px 6px 6px;margin:0;line-height:1.6}
+.gi{border:1px solid var(--line);border-radius:11px;overflow:hidden;background:#fff;cursor:zoom-in;padding:5px}
+.gi img{width:100%;height:auto;display:block;border-radius:7px}
+.gi p{margin:5px 1px 0;font-size:11.4px;color:var(--muted);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#lb{position:fixed;inset:0;background:rgba(8,9,11,.96);display:none;z-index:99;align-items:center;justify-content:center;flex-direction:column;padding:20px 12px;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+#lb.on{display:flex}
+#lb img{max-width:97vw;max-height:78vh;width:auto;height:auto;object-fit:contain;border-radius:6px}
+#lb .cap{color:#d8d2c6;font-size:14px;margin-top:13px;text-align:center;line-height:1.7;padding:0 6px}
+#lb .cap a{color:#e9c98a}
+#lb .x{position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px;color:#fff;font-size:28px;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center}
+#lb .hint2{color:#8d8779;font-size:12.5px;margin-top:9px;letter-spacing:1px}
+.note{font-size:13.4px;color:var(--muted);line-height:1.75}
+#top{position:fixed;right:14px;bottom:calc(18px + env(safe-area-inset-bottom));width:46px;height:46px;border-radius:50%;background:rgba(20,23,26,.86);color:#fff;font-size:20px;border:0;display:none;align-items:center;justify-content:center;z-index:70;box-shadow:0 6px 18px rgba(0,0,0,.28)}
+#top.show{display:flex}
+footer{background:var(--dark);color:#9e988b;font-size:13.6px;padding:26px 15px 40px;margin-top:40px;line-height:1.95}
+footer b{color:#e9c98a;font-weight:600}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="bar"><b>{{出发地→目的地}}</b><span>{{日期摘要}}</span></div>
+  <nav class="chips">
+    <a href="#s1"><em>01</em>总览</a><a href="#s2"><em>02</em>逐日行程</a>
+    <a href="#s3"><em>03</em>景点门票</a><a href="#s4"><em>04</em>机位姿势</a>
+    <a href="#s5"><em>05</em>预约</a><a href="#s6"><em>06</em>{{06}}</a>
+    <a href="#s7"><em>07</em>{{07}}</a><a href="#s8"><em>08</em>美食</a>
+    <a href="#s9"><em>09</em>预算</a><a href="#s10"><em>10</em>图库</a>
+  </nav>
+  <div id="prog"></div>
+</header>
+
+<section class="hero"><div class="wrap">
+  <span class="kicker">{{一句话行程摘要}}</span>
+  <h1>{{出发地}} <span>→</span> {{目的地}}<br>{{副标题}}</h1>
+  <p class="lead">{{人数}} · {{交通方式}} · {{关键数字}}</p>
+  <div class="stats">
+    <div class="stat"><b>{{主数字1}}</b><i>{{说明1}}</i></div>
+    <div class="stat"><b>{{主数字2}}</b><i>{{说明2}}</i></div>
+    <div class="stat"><b>{{主数字3}}</b><i>{{说明3}}</i></div>
+    <div class="stat"><b>{{主数字4}}</b><i>{{说明4}}</i></div>
+  </div>
+</div></section>
+
+<!-- ===== 01 ===== -->
+<section id="s1"><div class="wrap">
+  <div class="h2"><em>01</em><h2>{{01 标题}}</h2></div>
+  <p class="sub">{{说明}}</p>
+  <!-- AGENT：路线总览卡片 + 1–2 张图 -->
+</div></section>
+
+<!-- ===== 02 ===== -->
+<section id="s2"><div class="wrap">
+  <div class="h2"><em>02</em><h2>逐日行程 · 时间点</h2></div>
+  <p class="sub">按实际人数与拥堵估算；原则「前松后紧、宁早勿晚」。</p>
+  <!--
+  <div class="day">
+    <div class="day-h"><span class="d">D1 · 10/2</span><h3>起点 → 终点</h3><div class="km">220 km · 约 2.5 h</div></div>
+    <ul class="tl">
+      <li><time>06:30</time>正文：写具体动作</li>
+    </ul>
+    <div class="tip warn"><b>提醒：</b>…</div>
+    <figure class="ph"><span class="zoom">点开看大图</span><img src="@@IMG:01@@" alt="…" loading="lazy">
+      <figcaption>说明 · <a href="@@U:01@@" target="_blank" rel="noopener">小红书原笔记 ↗</a></figcaption></figure>
+  </div>
+  -->
+  <!-- AGENT：逐日行程卡片 -->
+</div></section>
+
+<!-- ===== 03 ===== -->
+<section id="s3"><div class="wrap">
+  <div class="h2"><em>03</em><h2>必去景点 · 门票</h2></div>
+  <p class="sub">{{价格口径}}</p>
+  <!-- AGENT：景点卡片（单列） -->
+</div></section>
+
+<!-- ===== 04 ===== -->
+<section id="s4"><div class="wrap">
+  <div class="h2"><em>04</em><h2>打卡机位 · 拍照姿势</h2></div>
+  <p class="sub">{{说明}}</p>
+  <!-- AGENT：机位图 + 姿势卡片 -->
+</div></section>
+
+<!-- ===== 05 ===== -->
+<section id="s5"><div class="wrap">
+  <div class="h2"><em>05</em><h2>预约 · {{时效性提醒}}</h2></div>
+  <p class="hint">← 表格可左右滑动 →</p>
+  <div class="tw"><table class="odd">
+    <thead><tr><th>景点</th><th>门票</th><th>怎么约</th><th>开放/入园</th></tr></thead>
+    <tbody><tr><td><b>示例</b></td><td>—</td><td>—</td><td>—</td></tr></tbody>
+  </table></div>
+  <!-- AGENT：表格行 + 抢票提醒 + 现场实拍图 -->
+</div></section>
+
+<!-- ===== 06 ===== -->
+<section id="s6"><div class="wrap">
+  <div class="h2"><em>06</em><h2>{{06 标题}}</h2></div>
+  <p class="sub">{{说明}}</p>
+  <!-- AGENT：自驾 or 公共交通提示卡片 -->
+</div></section>
+
+<!-- ===== 07 ===== -->
+<section id="s7"><div class="wrap">
+  <div class="h2"><em>07</em><h2>{{07 标题}}</h2></div>
+  <p class="sub">{{说明}}</p>
+  <div class="card"><span class="tag">关键指标</span><p><b>{{结论}}</b></p><p>{{依据}}</p></div>
+  <!-- AGENT：逐日表 + 对策 -->
+</div></section>
+
+<!-- ===== 08 ===== -->
+<section id="s8"><div class="wrap">
+  <div class="h2"><em>08</em><h2>一路吃什么</h2></div>
+  <p class="sub">{{说明}}</p>
+  <!-- AGENT：美食卡片 + 2 张图 -->
+</div></section>
+
+<!-- ===== 09 ===== -->
+<section id="s9"><div class="wrap">
+  <div class="h2"><em>09</em><h2>预算 · {{N}} 人分摊</h2></div>
+  <p class="sub">{{说明}}</p>
+  <p class="hint">← 表格可左右滑动 →</p>
+  <div class="tw"><table class="odd">
+    <thead><tr><th>项目</th><th>{{N}} 人合计</th><th>人均</th><th>说明</th></tr></thead>
+    <tbody><tr><td><b>合计</b></td><td><b>0</b></td><td><b>0</b></td><td>—</td></tr></tbody>
+  </table></div>
+  <!-- AGENT：预算行 + 省钱招 -->
+</div></section>
+
+<!-- ===== 10 ===== -->
+<section id="s10"><div class="wrap">
+  <div class="h2"><em>10</em><h2>图库 &amp; 笔记索引</h2></div>
+  <p class="sub">全部实拍图（同一张原图、未裁剪），点图看大图。</p>
+  <div class="gal" id="gal"></div>
+  <p class="hint" style="margin-top:16px">直接搜这些笔记（点链接跳原笔记）</p>
+  <div class="tw"><table class="odd">
+    <thead><tr><th>#</th><th>笔记</th><th>赞</th><th>藏</th><th>享</th><th>链接</th></tr></thead>
+    <tbody id="noteTable">
+      @@NOTES@@
+    </tbody>
+  </table></div>
+  <p class="note" style="margin-top:12px">{{图片版权与 token 兜底说明}}</p>
+</div></section>
+
+<footer><div class="wrap">
+  <b>{{行程标题}}</b> · {{日期}} · {{人数}} · {{交通方式}}<br>
+  {{关键数字摘要}}<br>
+  单文件离线版，图片样式全内嵌，可直接转发；外部链接需联网。
+</div></footer>
+
+<button id="top" aria-label="回到顶部">↑</button>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="查看大图">
+  <div class="x" id="lbx" title="关闭">×</div>
+  <img id="lbimg" src="" alt="大图预览">
+  <div class="cap" id="lbcap"></div>
+  <div class="hint2">点击任意处或按返回手势关闭</div>
+</div>
+
+<script>
+(function(){
+  var lb=document.getElementById('lb'),lbimg=document.getElementById('lbimg'),lbcap=document.getElementById('lbcap');
+  function open(src,cap){lbimg.src=src;lbcap.innerHTML=cap||'';lb.classList.add('on');document.body.style.overflow='hidden';}
+  function close(){lb.classList.remove('on');lbimg.src='';document.body.style.overflow='';}
+  document.addEventListener('click',function(e){
+    var img=e.target.closest('.ph img, .gi img');
+    if(img){e.preventDefault();
+      var box=img.closest('figure')||img.closest('.gi');
+      var cap=box?(box.querySelector('figcaption')||box.querySelector('p')):null;
+      open(img.getAttribute('src'),cap?cap.innerHTML:'');
+      return;}
+    if(e.target.id==='lb'||e.target.id==='lbx'){close();}
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+  // 安卓返回键关闭大图层，而不是直接退出页面
+  try{history.pushState(null,'',location.href);
+    window.addEventListener('popstate',function(){if(lb.classList.contains('on')){close();history.pushState(null,'',location.href);}});}catch(err){}
+
+  var gal=document.getElementById('gal'),seen={};
+  Array.prototype.forEach.call(document.querySelectorAll('section .ph img'),function(img){
+    var s=img.getAttribute('src'); if(!s||seen[s]) return; seen[s]=1;
+    var fig=img.closest('figure'),cap=fig?fig.querySelector('figcaption'):null;
+    var g=document.createElement('div'); g.className='gi';
+    var c=img.cloneNode(false); c.removeAttribute('loading'); g.appendChild(c);
+    var p=document.createElement('p');
+    p.textContent=cap?(cap.textContent||'').replace(/小红书.*$/,'').replace(/[·↗\s]+$/,'').trim():'';
+    g.appendChild(p); gal.appendChild(g);
+  });
+
+  var prog=document.getElementById('prog'),top=document.getElementById('top');
+  function onScroll(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    prog.style.width=(h>0?(window.pageYOffset/h*100):0)+'%';
+    top.classList.toggle('show',window.pageYOffset>600);
+  }
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# 默认按文本处理，仓库内统一存 LF，检出时按平台转换
+* text=auto eol=lf
+
+# 二进制资产，禁止任何行尾转换（diff 会彻底损坏）
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.pdf binary
+
+# 交付的成品 HTML 含 base64，体积大且不参与逐行 review
+docs/guide-*.html -diff linguist-generated=true
+
+# 脚本保持可执行语义清晰
+*.py text eol=lf
+*.sh text eol=lf
+*.md text eol=lf

@@ -1,0 +1,57 @@
+# ---- 采集中间产物（体积大、可重新生成，绝不要提交）----
+img/
+sheet/
+build/
+cands.json
+have.json
+*.webp
+*.jpg
+*.jpeg
+*.png
+!assets/**/*.png
+
+# ---- 临时测试副本 ----
+_*.html
+_*.py
+_*.json
+_*.js
+_t375*
+_wtest*
+_w2*
+test-*
+*.bak
+*.backup
+*.tmp
+*.log
+
+# ---- 生成的攻略成品（含他人版权图片 + 会过期的 token）----
+*-攻略-*.html
+*攻略*.html
+*-guide.html
+dist/
+out/
+
+# ---- 凭据 / 会话（小红书 cookie 等，绝对不要提交）----
+.env
+.env.*
+*cookie*
+*session*
+cookies.json
+*.har
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# ---- 编辑器 / 系统 ----
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
